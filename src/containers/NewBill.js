@@ -1,4 +1,3 @@
-
 import { ROUTES_PATH } from '../constants/routes.js'
 import Logout from "./Logout.js"
 
@@ -16,18 +15,33 @@ export default class NewBill {
     new Logout({ document, localStorage, onNavigate })
   }
   handleChangeFile = e => {
+    /**
+     * VALIDATION FORMAT IMAGE UPLOADED
+     * PNG / JPEG / JPG
+     */
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
-    const filePath = e.target.value.split(/\\/g)
-    const fileName = filePath[filePath.length-1]
-    this.firestore
-      .storage
-      .ref(`justificatifs/${fileName}`)
-      .put(file)
-      .then(snapshot => snapshot.ref.getDownloadURL())
-      .then(url => {
-        this.fileUrl = url
-        this.fileName = fileName
-      })
+    // get extension
+    const filePath = e.target.value.split('.').pop()
+
+    // store image 
+    if(filePath === "jpg" || filePath === "jpeg" || filePath === "png") {
+      const fileName = filePath[filePath.length-1]
+      this.firestore
+        .storage
+        .ref(`justificatifs/${fileName}`)
+        .put(file)
+        .then(snapshot => snapshot.ref.getDownloadURL())
+        .then(url => {
+          this.fileUrl = url
+          this.fileName = fileName
+        })
+        this.document.getElementById("wrongFormat").innerText = ""
+
+    } else {
+      // reject storing image because wrong format
+      this.document.getElementById("wrongFormat").innerText = "Seul les images avec l'extension suivante sont autorisées : jpg, jpeg ou png"
+      this.document.querySelector(`input[data-testid='file']`).value = null;
+    }
   }
   handleSubmit = e => {
     e.preventDefault()

@@ -22,6 +22,11 @@
   border-radius: 5px;
 }
 
+#wrongFormat {
+  font-size: 18px;
+  color:#f04731;
+}
+
 label {
   font-style: normal;
   font-weight: 500;

@@ -5,12 +5,12 @@ import { ROUTES_PATH } from '../constants/routes.js'
 import USERS_TEST from '../constants/usersTest.js'
 import Logout from "./Logout.js"
 
+
 export const filteredBills = (data, status) => {
   return (data && data.length) ?
     data.filter(bill => {
-
       let selectCondition
-
+      
       // in jest environment
       if (typeof jest !== 'undefined') {
         selectCondition = (bill.status === status)
@@ -18,8 +18,8 @@ export const filteredBills = (data, status) => {
         // in prod environment
         const userEmail = JSON.parse(localStorage.getItem("user")).email
         selectCondition =
-          (bill.status === status) &&
-          [...USERS_TEST, userEmail].includes(bill.email)
+        bill.status === status &&
+        [...USERS_TEST, userEmail].includes(bill.email)
       }
 
       return selectCondition
@@ -71,6 +71,11 @@ export default class {
     this.document = document
     this.onNavigate = onNavigate
     this.firestore = firestore
+    this.isOpenList = {
+      isOpen1: false,
+      isOpen2: false,
+      isOpen3: false,
+    }
     $('#arrow-icon1').click((e) => this.handleShowTickets(e, bills, 1))
     $('#arrow-icon2').click((e) => this.handleShowTickets(e, bills, 2))
     $('#arrow-icon3').click((e) => this.handleShowTickets(e, bills, 3))
@@ -131,23 +136,35 @@ export default class {
   }
 
   handleShowTickets(e, bills, index) {
-    if (this.counter === undefined || this.index !== index) this.counter = 0
+    console.log(index);
     if (this.index === undefined || this.index !== index) this.index = index
-    if (this.counter % 2 === 0) {
-      $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
-      $(`#status-bills-container${this.index}`)
-        .html(cards(filteredBills(bills, getStatus(this.index))))
-      this.counter ++
-    } else {
+    if (this.isOpenList[`isOpen${index}`]) {
+      // CLOSE
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)'})
       $(`#status-bills-container${this.index}`)
         .html("")
-      this.counter ++
+        this.isOpenList[`isOpen${index}`] = false
+    } else {
+      //OPEN
+      $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
+      try {
+        $(`#status-bills-container${this.index}`)
+          .html(cards(filteredBills(bills, getStatus(this.index))))
+        this.isOpenList[`isOpen${index}`] = true
+      } catch (error) {
+        console.log();
+      }
     }
 
     bills.forEach(bill => {
       $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
     })
+
+    // WHEN ALL LIST ARE CLOSED DASHBOARD COME TO INITIAL DESIGN
+    if(!this.isOpenList[`isOpen${1}`] && !this.isOpenList[`isOpen${2}`] && !this.isOpenList[`isOpen${3}`]) {
+      $('.dashboard-right-container div').html(`<div id="big-billed-icon"> ${BigBilledIcon} </div>`)
+      $('.vertical-navbar').css({ height: '120vh' })
+    }
 
     return bills
 

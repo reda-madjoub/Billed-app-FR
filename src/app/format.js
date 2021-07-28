@@ -1,5 +1,4 @@
-export const formatDate = (dateStr) => {  
-  console.log(dateStr)
+export const formatDate = (dateStr) => {
   // return "" when wrong format
   if(dateStr === "") return ""
   const date = new Date(dateStr)

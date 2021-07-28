@@ -49,19 +49,24 @@ export default class NewBill {
     const email = JSON.parse(localStorage.getItem("user")).email
     const bill = {
       email,
-      type: e.target.querySelector(`select[data-testid="expense-type"]`).value,
-      name:  e.target.querySelector(`input[data-testid="expense-name"]`).value,
-      amount: parseInt(e.target.querySelector(`input[data-testid="amount"]`).value),
-      date:  e.target.querySelector(`input[data-testid="datepicker"]`).value,
-      vat: e.target.querySelector(`input[data-testid="vat"]`).value,
-      pct: parseInt(e.target.querySelector(`input[data-testid="pct"]`).value) || 20,
-      commentary: e.target.querySelector(`textarea[data-testid="commentary"]`).value,
-      fileUrl: this.fileUrl,
-      fileName: this.fileName,
-      status: 'pending'
+        type: e.target.querySelector(`select[data-testid="expense-type"]`).value,
+        name:  e.target.querySelector(`input[data-testid="expense-name"]`).value,
+        amount: parseInt(e.target.querySelector(`input[data-testid="amount"]`).value),
+        date:  e.target.querySelector(`input[data-testid="datepicker"]`).value,
+        vat: e.target.querySelector(`input[data-testid="vat"]`).value,
+        pct: parseInt(e.target.querySelector(`input[data-testid="pct"]`).value) || 20,
+        commentary: e.target.querySelector(`textarea[data-testid="commentary"]`).value,
+        fileUrl: this.fileUrl,
+        fileName: this.fileName,
+        status: 'pending'
+      }
+    if(bill['name'].length > 5) {
+      this.createBill(bill)
+      this.onNavigate(ROUTES_PATH['Bills'])
+      this.document.getElementById('missingName').innerText = ""
+    }else {
+      this.document.getElementById('missingName').innerText = "il faut ajouter un nom à la dépense d'au moins 5 lettres"
     }
-    this.createBill(bill)
-    this.onNavigate(ROUTES_PATH['Bills'])
   }
 
   // not need to cover this function by tests

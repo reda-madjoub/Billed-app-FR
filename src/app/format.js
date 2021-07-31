@@ -1,6 +1,8 @@
 export const formatDate = (dateStr) => {
   // return "" when wrong format
-  if(dateStr === "") return ""
+  // if(dateStr === "") return ""
+  // @author Adomoison
+  if(!dateStr) return  // undefined, null, 0, ... all falsy values
   const date = new Date(dateStr)
   const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
   const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(date)

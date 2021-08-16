@@ -17,7 +17,7 @@ export default class {
   }
 
   handleClickNewBill = e => {
-    this.onNavigate(ROUTES_PATH['NewBill'])
+    this.onNavigate(ROUTES_PATH['NewBill'])   /// TEST
   }
 
   handleClickIconEye = (icon) => {

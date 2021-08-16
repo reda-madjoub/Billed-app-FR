@@ -42,6 +42,8 @@ export default () => {
         rootDiv.innerHTML = ROUTES({ pathname, error })
       })
     } else if (pathname === ROUTES_PATH['NewBill']) {
+      console.log(ROUTES);
+      console.log(ROUTES_PATH);
       rootDiv.innerHTML = ROUTES({ pathname, loading: true })
       new NewBill({ document, onNavigate, firestore, localStorage })
       const divIcon1 = document.getElementById('layout-icon1')

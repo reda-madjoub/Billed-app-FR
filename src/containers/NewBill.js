@@ -19,10 +19,9 @@ export default class NewBill {
      * VALIDATION FORMAT IMAGE UPLOADED
      * PNG / JPEG / JPG
      */
-    const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
+    const file = this.document.querySelector(`input[data-testid="file"]`).files
     // get extension
-    const filePath = e.target.value.split('.').pop()
-
+    const filePath = file[0].name.split(".").pop()
     // store image 
     if(filePath === "jpg" || filePath === "jpeg" || filePath === "png") {
       const fileName = filePath[filePath.length-1]
@@ -36,11 +35,11 @@ export default class NewBill {
           this.fileName = fileName
         })
         this.document.getElementById("wrongFormat").innerText = ""
-
     } else {
       // reject storing image because wrong format
-      this.document.getElementById("wrongFormat").innerText = "Seul les images avec l'extension suivante sont autorisées : jpg, jpeg ou png"
       this.document.querySelector(`input[data-testid='file']`).value = null;
+      this.document.getElementById("wrongFormat").innerText = "Seul les images avec l'extension suivante sont autorisées : jpg, jpeg ou png"
+
     }
   }
   handleSubmit = e => {

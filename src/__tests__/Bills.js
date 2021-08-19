@@ -8,8 +8,6 @@ import Firestore from "../app/Firestore";
 import Bills from "../containers/Bills.js"
 import { bills } from "../fixtures/bills.js"
 import {localStorageMock} from "../__mocks__/localStorage.js"
-import usersTest from "../constants/usersTest.js"
-import {handleClickNewBill, handleClickIconEye} from '../containers/Bills.js'
 import firebase from "../__mocks__/firebase"
 import Router from "../app/Router.js";
 
@@ -30,13 +28,10 @@ describe("Given I am connected as an employee", () => {
       const pathname = ROUTES_PATH['Bills'] // ==> #employee/bills
       document.body.innerHTML = BillsUI({data: []})
       onNavigate(pathname) // ==>  BillsUI({ data, error, loading })
-      // ??????
       // Mock Firestore file (only class exist in)
       jest.mock("../app/Firestore");
       // mock bills method
       Firestore.bills = () => ({ bills, get: jest.fn().mockResolvedValue() });
-      // ?????
-
       // HTML DOM creation - DIV
       Object.defineProperty(window, "location", { value: { hash: pathname } });
       document.body.innerHTML = `<div id="root"></div>`;
